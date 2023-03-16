@@ -1,0 +1,10 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 500MB
+file:
+  location: D:\\labprint-test\\
+  pdf-tool:
+log:
+  duration: /Users/pangjiping/photo/
