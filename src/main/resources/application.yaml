@@ -8,3 +8,6 @@ file:
   pdf-tool:
 log:
   duration: /Users/pangjiping/photo/
+
+logging:
+  config: classpath:log4j2.xml
