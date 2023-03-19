@@ -3,6 +3,7 @@ package org.epha.com.labprint.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 public class PrintPdfOrderlyOptions implements PrintPdfOptions {
     @Value("${file.location}")
     private static String fileLocation;

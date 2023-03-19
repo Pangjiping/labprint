@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验室打印系统</title>
+</head>
+<body>
+
+<h1>欢迎访问实验室打印系统</h1>
+<h2>请上传需要打印的文件，不填写打印范围默认为全文打印</h2>
+<h2>连续打印和通过页索引打印冲突，优先级为连续打印>页索引</h2>
+
+<form enctype="multipart/form-data" method="POST" action="/print/pdf">
+    学号[必填]：<input type="text" name="owner" /><br>
+    份数[默认为1]：<input type="text" name="copies" /><br>
+    打印起始页[默认为第一页]：<input type="text" name="startPage" /><br>
+    打印结束页[默认为最后一页]：<input type="text" name="endPage" /><br>
+    打印页索引[数组表示，形如 1,2,3]：<input type="text" name="pageIndex" /><br>
+    上传文件[只打印pdf文件]：<input type="file" name="files" multiple="multiple" /><br>
+    <input type="submit" value="打印" />
+</form>
+
+</body>
+</html>
