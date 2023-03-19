@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.epha.com.labprint.entity.BizException;
 import org.epha.com.labprint.entity.ResponseData;
 import org.epha.com.labprint.enums.ResponseEnum;
+import org.epha.com.labprint.pojo.PrintPdfOptions;
+import org.epha.com.labprint.pojo.PrintPdfOrderlyOptions;
+import org.epha.com.labprint.pojo.PrintPdfPagesOptions;
 import org.epha.com.labprint.service.PrintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -26,35 +33,47 @@ public class PrintController {
     private PrintService printService;
 
     @PostMapping("/print/pdf")
-    public ResponseData<String> printPdf(@RequestParam("copies") Integer copies,
-                                 @RequestParam("studentId") String studentId,
-                                 // @RequestParam("doubleSides") Boolean doubleSides,
-                                 @RequestParam("files") MultipartFile[] files) {
+    public ResponseData<String> printPdf(@RequestParam(value = "copies", required = false) Integer copies,
+                           @RequestParam(value = "owner") String owner,
+                           @RequestParam(value = "startPage", required = false) Integer startPage,
+                           @RequestParam(value = "endPage", required = false) Integer endPage,
+                           @RequestParam(value = "pageIndex", required = false) List<Integer> pages,
+                           @RequestParam(value = "files") MultipartFile[] files) throws Exception {
 
-        List<String> fileList = new ArrayList<>();
+        List<PrintPdfOptions> printOptionsList = new ArrayList<>();
         if (files.length > 0) {
             for (var file : files) {
-                String studentFilePath = fileLocation + studentId + "\\";
-                log.info("服务器保存文件成功！");
-//                createFilePath(new File(studentFilePath));
+                String ownerFilePath = fileLocation + owner + "\\";
+                createFilePath(new File(ownerFilePath));
+
                 try {
-                    file.transferTo(new File(studentFilePath + file.getOriginalFilename()));
+                    file.transferTo(new File(ownerFilePath + file.getOriginalFilename()));
                 } catch (IOException e) {
                     throw new BizException(ResponseEnum.ERROR);
                 }
-                fileList.add(file.getOriginalFilename());
+
+
+                if (startPage != null) {
+                    printOptionsList.add(new PrintPdfOrderlyOptions(
+                            owner,
+                            file.getOriginalFilename(),
+                            copies == null ? 1 : copies,
+                            startPage,
+                            endPage
+                    ));
+                } else if (pages != null && pages.size() > 0) {
+                    printOptionsList.add(new PrintPdfPagesOptions(
+                            owner,
+                            file.getOriginalFilename(),
+                            copies == null ? 1 : copies,
+                            pages
+                    ));
+                }
+                for (PrintPdfOptions options : printOptionsList) {
+                    printService.printPdf(null, options);
+                }
             }
         }
-
-        // 打印
-        for (String fileName : fileList) {
-//            printService.printPdf(null, fileLocation + fileName, copies);
-            log.info("开始打印");
-            log.error("开始打印error");
-        }
-
-//        List<String> logs = getLogs("D:/logs/error.log");
-
         return ResponseData.success("success");
     }
 
@@ -62,7 +81,7 @@ public class PrintController {
      * 判断文件是否存在，不存在就创建
      * @param file
      */
-    public void createFilePath(File file) {
+    private void createFilePath(File file) {
         if (file.exists()) {
             log.info("File exists");
         } else {
