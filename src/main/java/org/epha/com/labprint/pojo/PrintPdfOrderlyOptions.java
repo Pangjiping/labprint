@@ -5,10 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
+/**
+ * @author: Pangjiping
+ * @date: 2023/3/19
+ */
 @Getter
 @Setter
 @AllArgsConstructor
-public class PrintPdfOrderlyOptions implements PrintPdfOptions{
+public class PrintPdfOrderlyOptions implements PrintPdfOptions {
     @Value("${file.location}")
     private static String fileLocation;
 

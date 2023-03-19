@@ -6,7 +6,7 @@ import org.epha.com.labprint.enums.ResponseEnum;
 
 /**
  * @author: YRH
- * @date: 2023/3/3
+ * @date: 2023/3/19
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ResponseData<T> {
