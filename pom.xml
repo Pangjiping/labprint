@@ -23,6 +23,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+				<!-- 引入log4j日志时需去掉默认的logback -->
+                <exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
 
         <dependency>
@@ -142,6 +149,12 @@
             <artifactId>poi</artifactId>
             <version>3.16</version>
         </dependency> -->
+
+        <!-- 日志管理log4j2 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
     </dependencies>
 
 

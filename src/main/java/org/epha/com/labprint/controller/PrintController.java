@@ -1,5 +1,9 @@
 package org.epha.com.labprint.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.epha.com.labprint.entity.BizException;
+import org.epha.com.labprint.entity.ResponseData;
+import org.epha.com.labprint.enums.ResponseEnum;
 import org.epha.com.labprint.pojo.PrintPdfOptions;
 import org.epha.com.labprint.pojo.PrintPdfOrderlyOptions;
 import org.epha.com.labprint.pojo.PrintPdfPagesOptions;
@@ -11,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class PrintController {
 
     @Value("${file.location}")
@@ -25,7 +33,7 @@ public class PrintController {
     private PrintService printService;
 
     @PostMapping("/print/pdf")
-    public String printPdf(@RequestParam(value = "copies", required = false) Integer copies,
+    public ResponseData<String> printPdf(@RequestParam(value = "copies", required = false) Integer copies,
                            @RequestParam(value = "owner") String owner,
                            @RequestParam(value = "startPage", required = false) Integer startPage,
                            @RequestParam(value = "endPage", required = false) Integer endPage,
@@ -35,7 +43,14 @@ public class PrintController {
         List<PrintPdfOptions> printOptionsList = new ArrayList<>();
         if (files.length > 0) {
             for (var file : files) {
-                file.transferTo(new File(fileLocation + file.getOriginalFilename()));
+                String ownerFilePath = fileLocation + owner + "\\";
+                createFilePath(new File(ownerFilePath));
+
+                try {
+                    file.transferTo(new File(ownerFilePath + file.getOriginalFilename()));
+                } catch (IOException e) {
+                    throw new BizException(ResponseEnum.ERROR);
+                }
 
 
                 if (startPage != null) {
@@ -54,15 +69,38 @@ public class PrintController {
                             pages
                     ));
                 }
+                for (PrintPdfOptions options : printOptionsList) {
+                    printService.printPdf(null, options);
+                }
             }
         }
+        return ResponseData.success("success");
+    }
 
-        // 打印
-        for (PrintPdfOptions options : printOptionsList) {
-            printService.printPdf(null, options);
+    /**
+     * 判断文件是否存在，不存在就创建
+     * @param file
+     */
+    private void createFilePath(File file) {
+        if (file.exists()) {
+            log.info("File exists");
+        } else {
+            log.info("File not exists, create it ...");
+            file.mkdir();
         }
+    }
 
-        return "index";
+    public List<String> getLogs(String fileName) throws IOException {
+        List<String> logs = new ArrayList<String>();
+        File file = new File(fileName);
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        String line;
+        while((line = br.readLine()) != null){
+            // 一行一行地处理...
+            logs.add(line);
+        }
+        return logs;
     }
 
 }
