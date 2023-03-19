@@ -2,7 +2,7 @@ package org.epha.com.labprint.enums;
 
 /**
  * @author: YRH
- * @date: 2023/3/3
+ * @date: 2023/3/19
  */
 public enum ResponseEnum {
     SUCCESS(0, "SUCCESS"),
@@ -16,7 +16,7 @@ public enum ResponseEnum {
     ADMIN_ROLE_HAS_EXIT(1008, "ADMIN_ROLE_HAS_EXIT"),
     DATABASE_ERROR(1009, "DATABASE_ERROR"),
     ERROR_EMAIL(1010, "ERROR_EMAIL"),
-    UNEXPECTED(-1,"UNEXPECTED");
+    UNEXPECTED(-1, "UNEXPECTED");
 
     private final int status;
     private final String msg;

@@ -2,6 +2,7 @@ package org.epha.com.labprint.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 
+@Deprecated
 public class HtmlToPdfUtil {
     @Value("${file.pdf-tool}")
     private static String toPdfTool;

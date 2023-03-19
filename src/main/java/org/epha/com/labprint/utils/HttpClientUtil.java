@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
  * 从网络中获取资源
  * @author pangjiping
  */
+@Deprecated
 public class HttpClientUtil {
 
     /**

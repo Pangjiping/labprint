@@ -15,6 +15,10 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 
+/**
+ * @author: Pangjiping
+ * @date: 2023/3/19
+ */
 @Service
 public class PrintServiceImpl implements PrintService {
 

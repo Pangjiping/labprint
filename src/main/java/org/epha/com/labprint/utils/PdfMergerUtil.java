@@ -5,6 +5,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.util.List;
 
+/**
+ * @author: Pangjiping
+ * @date: 2023/3/19
+ */
 @Slf4j
 public class PdfMergerUtil {
     public static void mergePdf(PDDocument document, int start, int end) {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -22,6 +23,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author: Pangjiping
+ * @date: 2023/3/19
+ */
 @RestController
 @Slf4j
 public class PrintController {
@@ -29,7 +34,7 @@ public class PrintController {
     @Value("${file.location}")
     private String fileLocation;
 
-    @Autowired
+    @Resource
     private PrintService printService;
 
     @PostMapping("/print/pdf")

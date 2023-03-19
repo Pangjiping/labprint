@@ -4,7 +4,7 @@ import org.epha.com.labprint.enums.ResponseEnum;
 
 /**
  * @author: YRH
- * @date: 2023/3/3
+ * @date: 2023/3/19
  */
 public class BizException extends RuntimeException {
     protected int errorCode;
