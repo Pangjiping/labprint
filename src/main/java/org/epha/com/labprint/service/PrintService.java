@@ -1,7 +1,7 @@
 package org.epha.com.labprint.service;
 
-import java.io.FileInputStream;
+import org.epha.com.labprint.pojo.PrintPdfOptions;
 
 public interface PrintService {
-    void printPdf(String printName, String fileLocation,Integer copies);
+    void printPdf(String printerName, PrintPdfOptions options);
 }
