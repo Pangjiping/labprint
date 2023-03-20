@@ -38,7 +38,10 @@ public class PrintServiceImpl implements PrintService {
             if (options instanceof PrintPdfOrderlyOptions) {
                 PrintPdfOrderlyOptions printPdfOrderlyOptions = (PrintPdfOrderlyOptions) options;
                 copies = printPdfOrderlyOptions.getCopies() > 0 ? printPdfOrderlyOptions.getCopies() : 1;
-                if (printPdfOrderlyOptions.getStartPage() > 0 && printPdfOrderlyOptions.getEndPage() > 0) {
+                if (printPdfOrderlyOptions.getStartPage() != null
+                        && printPdfOrderlyOptions.getEndPage() != null
+                        && printPdfOrderlyOptions.getStartPage() > 0
+                        && printPdfOrderlyOptions.getEndPage() > 0) {
                     PdfMergerUtil.mergePdf(document, printPdfOrderlyOptions.getStartPage(), printPdfOrderlyOptions.getEndPage());
                 }
             } else if (options instanceof PrintPdfPagesOptions) {
