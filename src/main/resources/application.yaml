@@ -1,13 +1,15 @@
 spring:
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 500MB
+      max-file-size: 50MB
+      max-request-size: 200MB
 file:
-  location: D:\\labprint-test\\
+  location: F:\\lab-print\\
   pdf-tool:
 log:
   duration: /Users/pangjiping/photo/
 
 logging:
   config: classpath:log4j2.xml
+server:
+  port: 9080
