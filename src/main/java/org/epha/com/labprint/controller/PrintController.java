@@ -8,7 +8,6 @@ import org.epha.com.labprint.pojo.PrintPdfOptions;
 import org.epha.com.labprint.pojo.PrintPdfOrderlyOptions;
 import org.epha.com.labprint.pojo.PrintPdfPagesOptions;
 import org.epha.com.labprint.service.PrintService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,37 +45,49 @@ public class PrintController {
                            @RequestParam(value = "files") MultipartFile[] files) throws Exception {
 
         List<PrintPdfOptions> printOptionsList = new ArrayList<>();
-        if (files.length > 0) {
-            for (var file : files) {
-                String ownerFilePath = fileLocation + owner + "\\";
-                createFilePath(new File(ownerFilePath));
+        // 不用对files判空
+        for (var file : files) {
+            String ownerFilePath = fileLocation + owner + "\\";
+            createFilePath(new File(ownerFilePath));
 
-                try {
-                    file.transferTo(new File(ownerFilePath + file.getOriginalFilename()));
-                } catch (IOException e) {
-                    throw new BizException(ResponseEnum.ERROR);
-                }
+            try {
+                file.transferTo(new File(ownerFilePath + file.getOriginalFilename()));
+            } catch (IOException e) {
+                throw new BizException(ResponseEnum.ERROR);
+            }
 
-
-                if (startPage != null) {
-                    printOptionsList.add(new PrintPdfOrderlyOptions(
-                            owner,
-                            file.getOriginalFilename(),
-                            copies == null ? 1 : copies,
-                            startPage,
-                            endPage
-                    ));
-                } else if (pages != null && pages.size() > 0) {
-                    printOptionsList.add(new PrintPdfPagesOptions(
-                            owner,
-                            file.getOriginalFilename(),
-                            copies == null ? 1 : copies,
-                            pages
-                    ));
-                }
-                for (PrintPdfOptions options : printOptionsList) {
-                    printService.printPdf(null, options);
-                }
+            if (startPage != null && endPage != null) {
+                // 连续打印优先级最高
+                printOptionsList.add(new PrintPdfOrderlyOptions(
+                        fileLocation,
+                        owner,
+                        file.getOriginalFilename(),
+                        copies == null ? 1 : copies,
+                        startPage,
+                        endPage
+                ));
+            } else if (pages != null && pages.size() > 0) {
+                // 页索引打印
+                printOptionsList.add(new PrintPdfPagesOptions(
+                        fileLocation,
+                        owner,
+                        file.getOriginalFilename(),
+                        copies == null ? 1 : copies,
+                        pages
+                ));
+            } else {
+                // 兜底：上传文件就必须打印
+                printOptionsList.add(new PrintPdfOrderlyOptions(
+                        fileLocation,
+                        owner,
+                        file.getOriginalFilename(),
+                        copies == null ? 1 : copies,
+                        startPage,
+                        endPage
+                ));
+            }
+            for (PrintPdfOptions options : printOptionsList) {
+                printService.printPdf(null, options);
             }
         }
         return ResponseData.success("success");
@@ -95,6 +106,7 @@ public class PrintController {
         }
     }
 
+    @Deprecated
     public List<String> getLogs(String fileName) throws IOException {
         List<String> logs = new ArrayList<String>();
         File file = new File(fileName);

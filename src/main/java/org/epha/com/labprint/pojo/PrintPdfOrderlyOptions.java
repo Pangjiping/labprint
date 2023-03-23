@@ -3,7 +3,7 @@ package org.epha.com.labprint.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.ToString;
 
 /**
  * @author: Pangjiping
@@ -12,16 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 public class PrintPdfOrderlyOptions implements PrintPdfOptions {
-    @Value("${file.location}")
-    private static String fileLocation;
-
-
+    private String fileLocation;
     private String owner;
     private String fileName;
-    private int copies;
-    private int startPage;
-    private int endPage;
+    private Integer copies;
+    private Integer startPage;
+    private Integer endPage;
 
     @Override
     public String getFileFullName() {
