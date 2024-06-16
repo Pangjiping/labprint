@@ -1,0 +1,29 @@
+name: Rerun failed jobs for Actions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  success:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Hello, Actions
+        run: echo "Hello, GitHub Actions"
+      - name: Timestamps
+        run: date +"%Y-%m-%d %H:%M:%S %Z"
+  fail:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Hello, Actions
+        run: echo "Hello, GitHub Actions"
+      - name: Timestamps
+        run: date +"%Y-%m-%d %H:%M:%S %Z"
+      - name: I'm Died
+        run: exit 1
+      - name: Unreachable
+        run: echo "I'm unreachable"
