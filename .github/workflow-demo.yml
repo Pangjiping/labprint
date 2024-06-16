@@ -1,0 +1,23 @@
+name: Octo Organization CI
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Hello, Actions
+        run: echo "Hello, Github Actions"
+      - name: Timestamps
+        run: date +"%Y-%m-%d %H:%M:%S %Z"
+      - name: I'm Died
+        run: exit 1
+      - name: Unreachable
+        run: echo "I'm unreachable"
