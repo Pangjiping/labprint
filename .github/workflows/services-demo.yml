@@ -19,4 +19,4 @@ jobs:
       - name: Hello, Actions
         run: echo "Hello, GitHub Actions"
       - name: Hello, Nginx
-        run: curl ${{ job.services.nginx.ports['8080'] }}
+        run: curl http://localhost:8080
