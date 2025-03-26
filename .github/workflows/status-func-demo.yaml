@@ -10,8 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: I'm died
-        run: exit 1
+      - name: I'm sleepy
+        run: sleep 365d
       - name: I'm always
         if: ${{ always() }}
         run: date +"%Y-%m-%d %H:%M:%S %Z"
