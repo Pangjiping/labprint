@@ -1,0 +1,19 @@
+name: StatusFunction for Actions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: I'm died
+        run: exit 1
+      - name: I'm always
+        if: ${{ always() }}
+        run: date +"%Y-%m-%d %H:%M:%S %Z"
+      - name: I'm unreachable
+        run: echo "I'm unreachable"
